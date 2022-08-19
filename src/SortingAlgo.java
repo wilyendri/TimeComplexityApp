@@ -91,7 +91,7 @@ public class SortingAlgo {
             quickSort(inputArray, pivot+1, high);
         }
     }
-
+    //testing commit
     private static int partition(int[] array, int low, int high){
         int pivot = array[high];
         int j = (low -1);
