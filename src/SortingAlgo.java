@@ -1,6 +1,6 @@
 //*This class holds different sorting algorithm
 // Author: Wilyendri Duran*//
-public interface SortingAlgo{
+public final class SortingAlgo{
 
     private static void swap(int[] arr, int i, int j){
         int temp = arr[i];
