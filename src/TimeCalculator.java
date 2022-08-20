@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
 
 public class TimeCalculator{
     private int[] array;
@@ -15,7 +15,7 @@ public class TimeCalculator{
         return endTime - initTime;
     }
 
-    public long calculateBubbleTime(){
+    public long calculateBubbleTime() throws TimeoutException {
         long initTime = System.currentTimeMillis();
         SortingAlgo.bubbleSort(array);
         long endTime = System.currentTimeMillis();
