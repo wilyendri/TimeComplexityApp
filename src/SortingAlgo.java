@@ -1,5 +1,6 @@
-//*This class holds different sorting algorithm*//
-public class SortingAlgo {
+//*This class holds different sorting algorithm
+// Author: Wilyendri Duran*//
+public interface SortingAlgo{
 
     private static void swap(int[] arr, int i, int j){
         int temp = arr[i];
@@ -7,7 +8,7 @@ public class SortingAlgo {
         arr[j] = temp;
     }
 
-    public static void mergeSort(int[] arrayInput){
+    static void mergeSort(int[] arrayInput){
         int midSize = arrayInput.length/2;
         int[] firstHalfArray = new int[midSize];
         int[] secondHalf = new int[arrayInput.length - midSize];
@@ -61,7 +62,7 @@ public class SortingAlgo {
         }
     }
 
-    public static void bubbleSort(int[] inputArray){
+    static void bubbleSort(int[] inputArray){
         for(int i  = 0; i < inputArray.length; i++){
             for(int j = i+1; j < inputArray.length; j++){
                 if(inputArray[i] > inputArray[j]){
@@ -72,7 +73,7 @@ public class SortingAlgo {
 
     }
 
-    public static void insertionSort(int[] inputArray){
+    static void insertionSort(int[] inputArray){
         for(int i  = 1; i < inputArray.length; i++){
             int currentElement = inputArray[i];
             int k;
@@ -84,7 +85,7 @@ public class SortingAlgo {
         }
     }
 
-    public static void quickSort(int[] inputArray, int low, int high){
+    static void quickSort(int[] inputArray, int low, int high){
         if(low < high){
             int pivot = partition(inputArray, low, high);
             quickSort(inputArray, low, pivot-1);
