@@ -1,6 +1,12 @@
-//*This class holds different sorting algorithm
-// Author: Wilyendri Duran*//
+import java.util.concurrent.TimeoutException;
+
+/**This class holds different sorting algorithm. It was made final to avoid extending this class.
+@author Wilyendri Duran*/
+
 public final class SortingAlgo{
+    /**Private constructor so it cannot be instantiated*/
+    private SortingAlgo(){}
+
 
     private static void swap(int[] arr, int i, int j){
         int temp = arr[i];
@@ -62,13 +68,18 @@ public final class SortingAlgo{
         }
     }
 
-    static void bubbleSort(int[] inputArray){
-        for(int i  = 0; i < inputArray.length; i++){
+    static void bubbleSort(int[] inputArray) throws TimeoutException {
+        long initTime = System.currentTimeMillis();
+        long endTime = initTime + 10 * 1000;
+        for(int i  = 0; i < inputArray.length && System.currentTimeMillis() < endTime; i++){
             for(int j = i+1; j < inputArray.length; j++){
                 if(inputArray[i] > inputArray[j]){
                     swap(inputArray, i, j);
                 }
             }
+        }
+        if(System.currentTimeMillis() >= endTime){
+            throw new TimeoutException();
         }
 
     }
