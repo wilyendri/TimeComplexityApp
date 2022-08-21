@@ -1,5 +1,10 @@
 /**Main GUI: The user will select a range that will determine the number of random elements the array will be filled up
 with. Each button will sort the array and calculate the time the specified sorting algorithm took.
+ TODO: Add Save option which will write to a text file and save the file
+ TODO: Add Open option that allows user to open file and output sorting functions and saved files
+ TODO: Add Data Base to output table of different algorithm and their time complexity
+ TODO: Add multithreading so multiple users can play the app
+ TODO: Add other Algorithms such as Binary Search
 @author: Wilyendri Duran
 */
 import javafx.application.Application;
@@ -13,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
@@ -23,6 +30,7 @@ public class TimeCompApp extends Application{
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
     Button btnInsert = new Button("Insert");
+    Button btnSave = new Button("Save");
     Label lblSize = new Label("Array Size");
     Label lblRange = new Label("Insert Range");
     //Label lblSep = new Label("-");
@@ -34,18 +42,31 @@ public class TimeCompApp extends Application{
     boolean isPressedInsert = false;
     TimeCalculator timeCalculator;
     ErrorWindow errorWindow;
+    SaveResult saveResult;
+    File file = new File("result.txt");
 
     @Override
     public void start(Stage stage) throws Exception {
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
         hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
-        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
+        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear, btnSave);
         GridPane gridPane = new GridPane();
         gridPane.add(hBox, 0,0);
         Pane pane = new Pane(textOut);
         gridPane.add(pane, 0,1);
         gridPane.add(hBoxBtns, 0, 2);
+
+        btnSave.setOnAction(e->{
+            if(isPressedInsert){
+                saveResult = new SaveResult(file, textOut.getText());
+                try {
+                    saveResult.writeToFile();
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         btnClear.setOnAction(e->{
             textOut.clear();
@@ -60,7 +81,13 @@ public class TimeCompApp extends Application{
                 isPressedInsert = true;
                 fillArray();
             }else{
-                textOut.setText("Both data must be inserted.");
+                errorWindow = new ErrorWindow("Both data must be inserted.");
+                Stage errorStage = new Stage();
+                try {
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
