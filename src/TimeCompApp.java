@@ -22,6 +22,7 @@ public class TimeCompApp extends Application{
     Button btnInsertion = new Button("InsertionSort");
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
+    Button btnInsert = new Button("Insert");
     Label lblSize = new Label("Array Size");
     Label lblRange = new Label("Insert Range");
     //Label lblSep = new Label("-");
@@ -30,13 +31,15 @@ public class TimeCompApp extends Application{
     TextField textEnd = new TextField();
     TextArea textOut = new TextArea();
     int[] arrayToSort;
+    boolean isPressedInsert = false;
     TimeCalculator timeCalculator;
+    ErrorWindow errorWindow;
 
     @Override
     public void start(Stage stage) throws Exception {
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
-        hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd);
+        hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
         hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
         GridPane gridPane = new GridPane();
         gridPane.add(hBox, 0,0);
@@ -44,56 +47,115 @@ public class TimeCompApp extends Application{
         gridPane.add(pane, 0,1);
         gridPane.add(hBoxBtns, 0, 2);
 
-        btnClear.setOnAction(e->textOut.clear());
+        btnClear.setOnAction(e->{
+            textOut.clear();
+            textSize.clear();
+            textEnd.clear();
+            isPressedInsert = false;
+        });
 
+        btnInsert.setOnAction(e->{
+            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
+                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
+                isPressedInsert = true;
+                fillArray();
+            }else{
+                textOut.setText("Both data must be inserted.");
+            }
+        });
 
         btnBubble.setOnAction(e-> {
-            try {
-                fillArray();
-                long time = timeCalculator.calculateBubbleTime();
-                textOut.appendText("Bubble Sort took " + time + "ms  to sort an array of "
-                        + arrayToSort.length + " elements. \n");
-                textOut.appendText("  ^Elements ordered by BubbleSort: " + timeCalculator + ". \n");
-            } catch (TimeoutException ex) {
-                textOut.setText(
-                        "Operation cancelled due to time out exception. Try again with a lower size. \n"
-                );
+            if(isPressedInsert){
+                try {
+                    long time = timeCalculator.calculateBubbleTime();
+                    textOut.appendText("Bubble Sort took " + time + "ms  to sort an array of "
+                            + arrayToSort.length + " elements. \n");
+                    textOut.appendText("  ^Elements ordered by BubbleSort: " + timeCalculator + ". \n");
+                } catch (TimeoutException ex) {
+                    textOut.setText(
+                            "Operation cancelled due to time out exception. Try again with a lower size. \n"
+                    );
+                }
+
+            }else{
+                errorWindow = new ErrorWindow("Must insert elements into array first.");
+                try {
+                    Stage errorStage = new Stage();
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
             }
         });
 
         btnInsertion.setOnAction(e->{
-            try {
-                long time = timeCalculator.calculateInsertionTime();
-                textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
-                        + arrayToSort.length + " elements. \n");
-                textOut.appendText("  ^Elements ordered by InsertionSort: " + timeCalculator + ". \n");
-            } catch (TimeoutException ex) {
-                textOut.setText(
-                        "Operation cancelled due to time out exception. Try again with a lower size. \n"
-                );
+            if(isPressedInsert){
+                try {
+                    long time = timeCalculator.calculateInsertionTime();
+                    textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
+                            + arrayToSort.length + " elements. \n");
+                    textOut.appendText("  ^Elements ordered by InsertionSort: " + timeCalculator + ". \n");
+                } catch (TimeoutException ex) {
+                    textOut.setText(
+                            "Operation cancelled due to time out exception. Try again with a lower size. \n"
+                    );
+                }
+            }else{
+                errorWindow = new ErrorWindow("Must insert elements into array first.");
+                try {
+                    Stage errorStage = new Stage();
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
             }
+
         });
 
         btnQuick.setOnAction(e->{
-            try{
-                long time = timeCalculator.calculateQuickTime();
-                textOut.appendText("Quick Sort took " + time + "ms  to sort an array of "
-                        + arrayToSort.length + " elements. \n");
-                textOut.appendText("  ^Elements ordered by QuickSort: " + timeCalculator + ". \n");
+            if(isPressedInsert){
+                try{
+                    long time = timeCalculator.calculateQuickTime();
+                    textOut.appendText("Quick Sort took " + time + "ms  to sort an array of "
+                            + arrayToSort.length + " elements. \n");
+                    textOut.appendText("  ^Elements ordered by QuickSort: " + timeCalculator + ". \n");
 
-            }catch (StackOverflowError ex){
-                textOut.setText(
-                        "Operation cancelled due to memory overflow error. Try again with a lower size. \n"
-                );
+                }catch (StackOverflowError ex){
+                    textOut.setText(
+                            "Operation cancelled due to memory overflow error. Try again with a lower size. \n"
+                    );
+                }
+            }else{
+                errorWindow = new ErrorWindow("Must insert elements into array first.");
+                try {
+                    Stage errorStage = new Stage();
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
             }
 
         });
 
         btnMerge.setOnAction(e->{
-            long time = timeCalculator.calculateMergeTime();
-            textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
-                    + arrayToSort.length + " elements. \n");
-            textOut.appendText("  ^Elements ordered by MergeSort: " + timeCalculator + ". \n");
+            if(isPressedInsert){
+                long time = timeCalculator.calculateMergeTime();
+                textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
+                        + arrayToSort.length + " elements. \n");
+                textOut.appendText("  ^Elements ordered by MergeSort: " + timeCalculator + ". \n");
+            }else{
+                errorWindow = new ErrorWindow("Must insert elements into array first.");
+                try {
+                    Stage errorStage = new Stage();
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
         });
 
         Scene scene = new Scene(gridPane, 500, 270);

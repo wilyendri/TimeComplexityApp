@@ -70,7 +70,7 @@ public final class SortingAlgo{
 
     /** Sort array by Bubble Sort
      * @param inputArray to be sorted
-     * @throws TimeoutException if the sorting takes longer than 10min*/
+     * @throws TimeoutException if the sorting takes longer than 10seg*/
     static void bubbleSort(int[] inputArray) throws TimeoutException {
         long initTime = System.currentTimeMillis();
         long endTime = initTime + 10 * 1000;
@@ -89,7 +89,7 @@ public final class SortingAlgo{
 
     /** Sort array by Insertion Sort
      * @param inputArray to be sorted
-     * @throws TimeoutException if the sorting takes longer than 10min*/
+     * @throws TimeoutException if the sorting takes longer than 10seg*/
     static void insertionSort(int[] inputArray) throws TimeoutException {
         long initTime = System.currentTimeMillis();
         long endTime = initTime + 10 * 1000;
