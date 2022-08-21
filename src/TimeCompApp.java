@@ -22,6 +22,7 @@ public class TimeCompApp extends Application{
     Button btnInsertion = new Button("InsertionSort");
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
+    Button btnInsert = new Button("Insert");
     Label lblSize = new Label("Array Size");
     Label lblRange = new Label("Insert Range");
     //Label lblSep = new Label("-");
@@ -36,7 +37,7 @@ public class TimeCompApp extends Application{
     public void start(Stage stage) throws Exception {
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
-        hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd);
+        hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
         hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
         GridPane gridPane = new GridPane();
         gridPane.add(hBox, 0,0);
@@ -46,10 +47,17 @@ public class TimeCompApp extends Application{
 
         btnClear.setOnAction(e->textOut.clear());
 
+        btnInsert.setOnAction(e->{
+            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
+                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
+                fillArray();
+            }else{
+                textOut.setText("Both data must be inserted.");
+            }
+        });
 
         btnBubble.setOnAction(e-> {
             try {
-                fillArray();
                 long time = timeCalculator.calculateBubbleTime();
                 textOut.appendText("Bubble Sort took " + time + "ms  to sort an array of "
                         + arrayToSort.length + " elements. \n");
