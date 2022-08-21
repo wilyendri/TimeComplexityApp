@@ -22,14 +22,14 @@ public class TimeCalculator{
         return endTime - initTime;
     }
 
-    public long calculateInsertionTime(){
+    public long calculateInsertionTime() throws TimeoutException {
         long initTime = System.currentTimeMillis();
         SortingAlgo.insertionSort(array);
         long endTime = System.currentTimeMillis();
         return endTime - initTime;
     }
 
-    public long calculateQuickTime(){
+    public long calculateQuickTime() throws StackOverflowError{
         long initTime = System.currentTimeMillis();
         SortingAlgo.quickSort(array, 0, array.length-1);
         long endTime = System.currentTimeMillis();

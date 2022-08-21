@@ -68,6 +68,9 @@ public final class SortingAlgo{
         }
     }
 
+    /** Sort array by Bubble Sort
+     * @param inputArray to be sorted
+     * @throws TimeoutException if the sorting takes longer than 10min*/
     static void bubbleSort(int[] inputArray) throws TimeoutException {
         long initTime = System.currentTimeMillis();
         long endTime = initTime + 10 * 1000;
@@ -84,8 +87,13 @@ public final class SortingAlgo{
 
     }
 
-    static void insertionSort(int[] inputArray){
-        for(int i  = 1; i < inputArray.length; i++){
+    /** Sort array by Insertion Sort
+     * @param inputArray to be sorted
+     * @throws TimeoutException if the sorting takes longer than 10min*/
+    static void insertionSort(int[] inputArray) throws TimeoutException {
+        long initTime = System.currentTimeMillis();
+        long endTime = initTime + 10 * 1000;
+        for(int i  = 1; i < inputArray.length && System.currentTimeMillis() < endTime; i++){
             int currentElement = inputArray[i];
             int k;
             for(k = i -1; k >= 0 && inputArray[k] > currentElement; k--){
@@ -94,9 +102,13 @@ public final class SortingAlgo{
 
             inputArray[k+1] = currentElement;
         }
+
+        if(System.currentTimeMillis() >= endTime){
+            throw new TimeoutException();
+        }
     }
 
-    static void quickSort(int[] inputArray, int low, int high){
+    static void quickSort(int[] inputArray, int low, int high) throws StackOverflowError{
         if(low < high){
             int pivot = partition(inputArray, low, high);
             quickSort(inputArray, low, pivot-1);
