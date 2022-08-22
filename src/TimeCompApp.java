@@ -11,13 +11,16 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
@@ -28,6 +31,7 @@ public class TimeCompApp extends Application{
     Button btnInsertion = new Button("InsertionSort");
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
+    Button btnSave = new Button("Save");
     Button btnInsert = new Button("Insert/Shuffle");
     Label lblSize = new Label("Size ");
     Label lblRange = new Label("From 0 to ");
@@ -47,9 +51,13 @@ public class TimeCompApp extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         // Set up menu
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*"));
         MenuItem menuInst = new MenuItem("Instructions", new ImageView("Resources/icons8-instructions-25.png"));
         MenuItem menuAbout = new MenuItem("About", new ImageView("Resources/icons8-about-25.png"));
         MenuItem menuOpen = new MenuItem("Open", new ImageView("Resources/icons8-opened-folder-25.png"));
+        menuOpen.setAccelerator(KeyCombination.keyCombination("Ctrl + o"));
         MenuItem menuSave = new MenuItem("Save", new ImageView("Resources/icons8-save-25.png"));
         textOut.setEditable(false);
         menuFile.getItems().addAll(menuOpen, menuSave);
@@ -59,7 +67,7 @@ public class TimeCompApp extends Application{
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
         hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
-        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
+        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear, btnSave);
         GridPane gridPane = new GridPane();
         menuBar.getMenus().addAll(menuFile, menuHelp);
         gridPane.add(menuBar,0,0);
@@ -68,7 +76,23 @@ public class TimeCompApp extends Application{
         gridPane.add(pane, 0,2);
         gridPane.add(hBoxBtns, 0, 3);
 
+        // Buttons actions
         menuSave.setOnAction(e->{
+            Stage stageSave = new Stage();
+            if(isPressedInsert){
+                try {
+                    saveResult = new SaveResult(new File(fileChooser.showSaveDialog(stageSave).getPath()), textOut.getText());
+                    saveResult.writeToFile();
+                    textOut.appendText("Data has been saved on " + new Date() + "\n");
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NullPointerException ex){
+                    System.out.println("Operation cancelled: Path is empty");
+                }
+            }
+        });
+
+        btnSave.setOnAction(e->{
             if(isPressedInsert){
                 saveResult = new SaveResult(file, textOut.getText());
                 try {
