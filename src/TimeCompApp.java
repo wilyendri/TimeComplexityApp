@@ -9,10 +9,8 @@ with. Each button will sort the array and calculate the time the specified sorti
 */
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -20,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
@@ -29,13 +28,10 @@ public class TimeCompApp extends Application{
     Button btnInsertion = new Button("InsertionSort");
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
-    Button btnInsert = new Button("Insert");
-    Button btnSave = new Button("Save");
-    Label lblSize = new Label("Array Size");
-    Label lblRange = new Label("Insert Range");
-    //Label lblSep = new Label("-");
+    Button btnInsert = new Button("Insert/Shuffle");
+    Label lblSize = new Label("Size ");
+    Label lblRange = new Label("From 0 to ");
     TextField textSize = new TextField();
-    //TextField textInit = new TextField();
     TextField textEnd = new TextField();
     TextArea textOut = new TextArea();
     int[] arrayToSort;
@@ -44,24 +40,40 @@ public class TimeCompApp extends Application{
     ErrorWindow errorWindow;
     SaveResult saveResult;
     File file = new File("result.txt");
+    MenuBar menuBar = new MenuBar();
+    Menu menuFile = new Menu("File");
+    Menu menuHelp = new Menu("Help");
 
     @Override
     public void start(Stage stage) throws Exception {
+        // Set up menu
+        MenuItem menuInst = new MenuItem("Instructions", new ImageView("Resources/icons8-instructions-25.png"));
+        MenuItem menuAbout = new MenuItem("About", new ImageView("Resources/icons8-about-25.png"));
+        MenuItem menuOpen = new MenuItem("Open", new ImageView("Resources/icons8-opened-folder-25.png"));
+        MenuItem menuSave = new MenuItem("Save", new ImageView("Resources/icons8-save-25.png"));
+        textOut.setEditable(false);
+        menuFile.getItems().addAll(menuOpen, menuSave);
+        menuHelp.getItems().addAll(menuInst, menuAbout);
+
+        // Setting UI panes, buttons, and labels
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
         hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
-        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear, btnSave);
+        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
         GridPane gridPane = new GridPane();
-        gridPane.add(hBox, 0,0);
+        menuBar.getMenus().addAll(menuFile, menuHelp);
+        gridPane.add(menuBar,0,0);
+        gridPane.add(hBox, 0,1);
         Pane pane = new Pane(textOut);
-        gridPane.add(pane, 0,1);
-        gridPane.add(hBoxBtns, 0, 2);
+        gridPane.add(pane, 0,2);
+        gridPane.add(hBoxBtns, 0, 3);
 
-        btnSave.setOnAction(e->{
+        menuSave.setOnAction(e->{
             if(isPressedInsert){
                 saveResult = new SaveResult(file, textOut.getText());
                 try {
                     saveResult.writeToFile();
+                    textOut.appendText("Data has been saved on " + new Date() + "\n");
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -80,6 +92,7 @@ public class TimeCompApp extends Application{
                     || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
                 isPressedInsert = true;
                 fillArray();
+                textOut.appendText("Data has been updated on " + new Date() + "\n");
             }else{
                 errorWindow = new ErrorWindow("Both data must be inserted.");
                 Stage errorStage = new Stage();
