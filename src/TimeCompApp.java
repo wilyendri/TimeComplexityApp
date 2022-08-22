@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
@@ -57,8 +56,9 @@ public class TimeCompApp extends Application{
         MenuItem menuInst = new MenuItem("Instructions", new ImageView("Resources/icons8-instructions-25.png"));
         MenuItem menuAbout = new MenuItem("About", new ImageView("Resources/icons8-about-25.png"));
         MenuItem menuOpen = new MenuItem("Open", new ImageView("Resources/icons8-opened-folder-25.png"));
-        menuOpen.setAccelerator(KeyCombination.keyCombination("Ctrl + o"));
         MenuItem menuSave = new MenuItem("Save", new ImageView("Resources/icons8-save-25.png"));
+        menuOpen.setAccelerator(KeyCombination.keyCombination("Ctrl + o"));
+        menuSave.setAccelerator(KeyCombination.keyCombination("Ctrl + s"));
         textOut.setEditable(false);
         menuFile.getItems().addAll(menuOpen, menuSave);
         menuHelp.getItems().addAll(menuInst, menuAbout);
@@ -75,8 +75,26 @@ public class TimeCompApp extends Application{
         Pane pane = new Pane(textOut);
         gridPane.add(pane, 0,2);
         gridPane.add(hBoxBtns, 0, 3);
+        // Stage to output window error
+        Stage errorStage = new Stage();
 
         // Buttons actions
+        btnInsert.setOnAction(e->{
+            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
+                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
+                isPressedInsert = true;
+                fillArray();
+                textOut.appendText("Data has been updated on " + new Date() + "\n");
+            }else{
+                errorWindow = new ErrorWindow("Both data must be inserted.");
+                try {
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
         menuSave.setOnAction(e->{
             Stage stageSave = new Stage();
             if(isPressedInsert){
@@ -111,22 +129,6 @@ public class TimeCompApp extends Application{
             isPressedInsert = false;
         });
 
-        btnInsert.setOnAction(e->{
-            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
-                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
-                isPressedInsert = true;
-                fillArray();
-                textOut.appendText("Data has been updated on " + new Date() + "\n");
-            }else{
-                errorWindow = new ErrorWindow("Both data must be inserted.");
-                Stage errorStage = new Stage();
-                try {
-                    errorWindow.start(errorStage);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
 
         btnBubble.setOnAction(e-> {
             if(isPressedInsert){
@@ -144,7 +146,6 @@ public class TimeCompApp extends Application{
             }else{
                 errorWindow = new ErrorWindow("Must insert elements into array first.");
                 try {
-                    Stage errorStage = new Stage();
                     errorWindow.start(errorStage);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -168,7 +169,6 @@ public class TimeCompApp extends Application{
             }else{
                 errorWindow = new ErrorWindow("Must insert elements into array first.");
                 try {
-                    Stage errorStage = new Stage();
                     errorWindow.start(errorStage);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -194,7 +194,6 @@ public class TimeCompApp extends Application{
             }else{
                 errorWindow = new ErrorWindow("Must insert elements into array first.");
                 try {
-                    Stage errorStage = new Stage();
                     errorWindow.start(errorStage);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -213,7 +212,6 @@ public class TimeCompApp extends Application{
             }else{
                 errorWindow = new ErrorWindow("Must insert elements into array first.");
                 try {
-                    Stage errorStage = new Stage();
                     errorWindow.start(errorStage);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
