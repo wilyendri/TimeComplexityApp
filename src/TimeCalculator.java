@@ -29,7 +29,7 @@ public class TimeCalculator{
         return endTime - initTime;
     }
 
-    public long calculateQuickTime() throws StackOverflowError{
+    public long calculateQuickTime() throws StackOverflowError, java.lang.OutOfMemoryError{
         long initTime = System.currentTimeMillis();
         SortingAlgo.quickSort(array, 0, array.length-1);
         long endTime = System.currentTimeMillis();

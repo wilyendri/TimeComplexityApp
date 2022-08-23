@@ -7,7 +7,6 @@ public final class SortingAlgo{
     /**Private constructor so it cannot be instantiated*/
     private SortingAlgo(){}
 
-
     private static void swap(int[] arr, int i, int j){
         int temp = arr[i];
         arr[i] = arr[j];
