@@ -42,12 +42,16 @@ public class TimeCompApp extends Application{
     MenuBar menuBar = new MenuBar();
     Menu menuFile = new Menu("File");
     Menu menuHelp = new Menu("Help");
+    OpenFile openFile;
 
     @Override
     public void start(Stage stage){
         // Set up menu
         FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooserOpen = new FileChooser();
         fileChooser.setTitle("Save");
+        fileChooserOpen.setTitle("Open");
+        fileChooserOpen.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*"));
         MenuItem menuInst = new MenuItem("Instructions", new ImageView("Resources/icons8-instructions-25.png"));
         MenuItem menuAbout = new MenuItem("About", new ImageView("Resources/icons8-about-25.png"));
@@ -103,6 +107,18 @@ public class TimeCompApp extends Application{
                 } catch (NullPointerException ex){
                     System.out.println("Operation cancelled: Path is empty");
                 }
+            }
+        });
+
+        menuOpen.setOnAction(e->{
+            Stage stageOpen = new Stage();
+            try{
+                openFile = new OpenFile(new File(fileChooserOpen.showOpenDialog(stageOpen).getPath()));
+                textOut.setText(openFile.readFile());
+            }catch (FileNotFoundException ex){
+                System.out.println("Not such a file");
+            }catch (NullPointerException exception){
+                System.out.println("Operation cancelled: Path is empty");
             }
         });
 
