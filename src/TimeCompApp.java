@@ -1,6 +1,5 @@
 /**Main GUI: The user will select a range that will determine the number of random elements the array will be filled up
 with. Each button will sort the array and calculate the time the specified sorting algorithm took.
- TODO: Add Save option which will write to a text file and save the file
  TODO: Add Open option that allows user to open file and output sorting functions and saved files
  TODO: Add Data Base to output table of different algorithm and their time complexity
  TODO: Add multithreading so multiple users can play the app
@@ -17,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -30,7 +28,6 @@ public class TimeCompApp extends Application{
     Button btnInsertion = new Button("InsertionSort");
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
-    Button btnSave = new Button("Save");
     Button btnInsert = new Button("Insert/Shuffle");
     Label lblSize = new Label("Size ");
     Label lblRange = new Label("From 0 to ");
@@ -42,13 +39,12 @@ public class TimeCompApp extends Application{
     TimeCalculator timeCalculator;
     ErrorWindow errorWindow;
     SaveResult saveResult;
-    File file = new File("result.txt");
     MenuBar menuBar = new MenuBar();
     Menu menuFile = new Menu("File");
     Menu menuHelp = new Menu("Help");
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage){
         // Set up menu
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
@@ -67,7 +63,7 @@ public class TimeCompApp extends Application{
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
         hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
-        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear, btnSave);
+        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
         GridPane gridPane = new GridPane();
         menuBar.getMenus().addAll(menuFile, menuHelp);
         gridPane.add(menuBar,0,0);
@@ -110,18 +106,6 @@ public class TimeCompApp extends Application{
             }
         });
 
-        btnSave.setOnAction(e->{
-            if(isPressedInsert){
-                saveResult = new SaveResult(file, textOut.getText());
-                try {
-                    saveResult.writeToFile();
-                    textOut.appendText("Data has been saved on " + new Date() + "\n");
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
         btnClear.setOnAction(e->{
             textOut.clear();
             textSize.clear();
@@ -134,9 +118,7 @@ public class TimeCompApp extends Application{
             if(isPressedInsert){
                 try {
                     long time = timeCalculator.calculateBubbleTime();
-                    textOut.appendText("Bubble Sort took " + time + "ms  to sort an array of "
-                            + arrayToSort.length + " elements. \n");
-                    textOut.appendText("  ^Elements ordered by BubbleSort: " + timeCalculator + ". \n");
+                    processSortBtn("Bubble-Sort", time, timeCalculator);
                 } catch (TimeoutException ex) {
                     textOut.setText(
                             "Operation cancelled due to time out exception. Try again with a lower size. \n"
@@ -158,9 +140,7 @@ public class TimeCompApp extends Application{
             if(isPressedInsert){
                 try {
                     long time = timeCalculator.calculateInsertionTime();
-                    textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
-                            + arrayToSort.length + " elements. \n");
-                    textOut.appendText("  ^Elements ordered by InsertionSort: " + timeCalculator + ". \n");
+                    processSortBtn("Insertion-Sort", time, timeCalculator);
                 } catch (TimeoutException ex) {
                     textOut.setText(
                             "Operation cancelled due to time out exception. Try again with a lower size. \n"
@@ -182,11 +162,9 @@ public class TimeCompApp extends Application{
             if(isPressedInsert){
                 try{
                     long time = timeCalculator.calculateQuickTime();
-                    textOut.appendText("Quick Sort took " + time + "ms  to sort an array of "
-                            + arrayToSort.length + " elements. \n");
-                    textOut.appendText("  ^Elements ordered by QuickSort: " + timeCalculator + ". \n");
+                    processSortBtn("Quick-Sort", time, timeCalculator);
 
-                }catch (StackOverflowError ex){
+                }catch (StackOverflowError | java.lang.OutOfMemoryError ex){
                     textOut.setText(
                             "Operation cancelled due to memory overflow error. Try again with a lower size. \n"
                     );
@@ -206,9 +184,7 @@ public class TimeCompApp extends Application{
         btnMerge.setOnAction(e->{
             if(isPressedInsert){
                 long time = timeCalculator.calculateMergeTime();
-                textOut.appendText("Insertion Sort took " + time + "ms  to sort an array of "
-                        + arrayToSort.length + " elements. \n");
-                textOut.appendText("  ^Elements ordered by MergeSort: " + timeCalculator + ". \n");
+                processSortBtn("Merge Sort", time, timeCalculator);
             }else{
                 errorWindow = new ErrorWindow("Must insert elements into array first.");
                 try {
@@ -233,6 +209,12 @@ public class TimeCompApp extends Application{
             arrayToSort[i] = rand.nextInt(Integer.parseInt(textEnd.getText().trim()));
         }
         timeCalculator = new TimeCalculator(arrayToSort);
+    }
+
+    public void processSortBtn(String sortType, long time, TimeCalculator timeCalculator){
+        textOut.appendText(sortType +" took " + time + "ms  to sort an array of "
+                + arrayToSort.length + " elements. \n");
+        textOut.appendText("  ^Elements ordered by " + sortType+": " + timeCalculator + ". \n");
     }
 
 

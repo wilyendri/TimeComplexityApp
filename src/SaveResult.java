@@ -3,7 +3,6 @@ import java.io.*;
 public class SaveResult implements Serializable {
     private File file;
     private String text;
-    FileOutputStream fileOutputStream;
 
     public SaveResult(File file, String text) {
         this.file = file;
