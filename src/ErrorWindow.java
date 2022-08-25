@@ -18,7 +18,7 @@ public class ErrorWindow extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Pane pane = new Pane();
         HBox hBox = new HBox(btnOk);
         BorderPane borderPane = new BorderPane();
