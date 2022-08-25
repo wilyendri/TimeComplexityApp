@@ -1,19 +1,17 @@
 /**Main GUI: The user will select a range that will determine the number of random elements the array will be filled up
 with. Each button will sort the array and calculate the time the specified sorting algorithm took.
- TODO: Add Open option that allows user to open file and output sorting functions and saved files
  TODO: Add Data Base to output table of different algorithm and their time complexity
- TODO: Add multithreading so multiple users can play the app
+ TODO: Add multithreading so multiple users can play the app (?)
  TODO: Add other Algorithms such as Binary Search
 @author: Wilyendri Duran
 */
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -43,6 +41,11 @@ public class TimeCompApp extends Application{
     Menu menuFile = new Menu("File");
     Menu menuHelp = new Menu("Help");
     OpenFile openFile;
+    ImageView bubbleImage = new ImageView("resources/BubbleSort.png");
+    ImageView insertionImage = new ImageView("resources/InsertionSort.png");
+    ImageView quickImage = new ImageView("resources/QuickSort.png");
+    ImageView mergeSortImage = new ImageView("resources/mergeSort.png");
+    ImageView mergeImage = new ImageView("resources/merge.png");
 
     @Override
     public void start(Stage stage){
@@ -53,10 +56,10 @@ public class TimeCompApp extends Application{
         fileChooserOpen.setTitle("Open");
         fileChooserOpen.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*"));
-        MenuItem menuInst = new MenuItem("Instructions", new ImageView("Resources/icons8-instructions-25.png"));
-        MenuItem menuAbout = new MenuItem("About", new ImageView("Resources/icons8-about-25.png"));
-        MenuItem menuOpen = new MenuItem("Open", new ImageView("Resources/icons8-opened-folder-25.png"));
-        MenuItem menuSave = new MenuItem("Save", new ImageView("Resources/icons8-save-25.png"));
+        MenuItem menuInst = new MenuItem("Instructions", new ImageView("resources/icons8-instructions-25.png"));
+        MenuItem menuAbout = new MenuItem("About", new ImageView("resources/icons8-about-25.png"));
+        MenuItem menuOpen = new MenuItem("Open", new ImageView("resources/icons8-opened-folder-25.png"));
+        MenuItem menuSave = new MenuItem("Save", new ImageView("resources/icons8-save-25.png"));
         menuOpen.setAccelerator(KeyCombination.keyCombination("Ctrl + o"));
         menuSave.setAccelerator(KeyCombination.keyCombination("Ctrl + s"));
         textOut.setEditable(false);
@@ -64,6 +67,9 @@ public class TimeCompApp extends Application{
         menuHelp.getItems().addAll(menuInst, menuAbout);
 
         // Setting UI panes, buttons, and labels
+        BorderPane allPanes = new BorderPane();
+        BorderPane paneImagesBox = new BorderPane();
+        paneImagesBox.setRight(quickImage);
         HBox hBox = new HBox();
         HBox hBoxBtns = new HBox();
         hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
@@ -72,9 +78,11 @@ public class TimeCompApp extends Application{
         menuBar.getMenus().addAll(menuFile, menuHelp);
         gridPane.add(menuBar,0,0);
         gridPane.add(hBox, 0,1);
-        Pane pane = new Pane(textOut);
-        gridPane.add(pane, 0,2);
+        Pane paneText = new Pane(textOut);
+        gridPane.add(paneText, 0,2);
         gridPane.add(hBoxBtns, 0, 3);
+        allPanes.setLeft(gridPane);
+
         // Stage to output window error
         Stage errorStage = new Stage();
 
@@ -126,11 +134,15 @@ public class TimeCompApp extends Application{
             textOut.clear();
             textSize.clear();
             textEnd.clear();
+            allPanes.setRight(new Pane());
+            allPanes.setCenter(new Pane());
             isPressedInsert = false;
         });
 
 
         btnBubble.setOnAction(e-> {
+            allPanes.setRight(bubbleImage);
+            allPanes.setCenter(new Pane());
             if(isPressedInsert){
                 try {
                     long time = timeCalculator.calculateBubbleTime();
@@ -153,6 +165,8 @@ public class TimeCompApp extends Application{
         });
 
         btnInsertion.setOnAction(e->{
+            allPanes.setRight(insertionImage);
+            allPanes.setCenter(new Pane());
             if(isPressedInsert){
                 try {
                     long time = timeCalculator.calculateInsertionTime();
@@ -175,6 +189,8 @@ public class TimeCompApp extends Application{
         });
 
         btnQuick.setOnAction(e->{
+            allPanes.setRight(quickImage);
+            allPanes.setCenter(new Pane());
             if(isPressedInsert){
                 try{
                     long time = timeCalculator.calculateQuickTime();
@@ -198,6 +214,14 @@ public class TimeCompApp extends Application{
         });
 
         btnMerge.setOnAction(e->{
+            mergeSortImage.setFitHeight(500);
+            mergeSortImage.setFitWidth(500);
+            mergeImage.setFitHeight(500);
+            mergeImage.setFitWidth(500);
+            allPanes.setCenter(mergeSortImage);
+            BorderPane mergePane = new BorderPane();
+            mergePane.setCenter(mergeImage);
+            allPanes.setRight(mergePane);
             if(isPressedInsert){
                 long time = timeCalculator.calculateMergeTime();
                 processSortBtn("Merge Sort", time, timeCalculator);
@@ -212,7 +236,7 @@ public class TimeCompApp extends Application{
             }
         });
 
-        Scene scene = new Scene(gridPane, 500, 270);
+        Scene scene = new Scene(allPanes, 1400, 800);
         stage.setTitle("Time Complexity Application");
         stage.setScene(scene);
         stage.show();
