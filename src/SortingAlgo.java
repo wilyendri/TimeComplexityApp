@@ -3,7 +3,7 @@ import java.util.concurrent.TimeoutException;
 /**This class holds different sorting algorithm. It was made final to avoid extending this class.
 @author Wilyendri Duran*/
 
-public final class SortingAlgo{
+public final class SortingAlgo {
     /**Private constructor so it cannot be instantiated*/
     private SortingAlgo(){}
 
@@ -32,8 +32,8 @@ public final class SortingAlgo{
 
         }
 
-        mergeSort(firstHalfArray);
-        mergeSort(secondHalf);
+        SortingAlgo.mergeSort(firstHalfArray);
+        SortingAlgo.mergeSort(secondHalf);
         merge(arrayInput, firstHalfArray, secondHalf);
 
     }
