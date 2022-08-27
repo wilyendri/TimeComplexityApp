@@ -1,12 +1,14 @@
-/**Main GUI: The user will select a range that will determine the number of random elements the array will be filled up
+package gui; /**Main GUI: The user will select a range that will determine the number of random elements the array will be filled up
 with. Each button will sort the array and calculate the time the specified sorting algorithm took.
  TODO: Add Data Base to output table of different algorithm and their time complexity
  TODO: Add multithreading so multiple users can play the app (?)
  TODO: Add other Algorithms such as Binary Search
 @author: Wilyendri Duran
 */
+import IOFeature.OpenFile;
+import IOFeature.SaveResult;
+import gui.ErrorWindow;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -14,6 +16,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import timeManager.TimeCalculator;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Date;

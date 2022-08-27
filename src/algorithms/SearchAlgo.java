@@ -1,3 +1,5 @@
+package algorithms;
+
 public class SearchAlgo implements SearchAlgoInterface{
     private int[] array;
 
@@ -21,6 +23,16 @@ public class SearchAlgo implements SearchAlgoInterface{
             }
         }
 
+        return -1;
+    }
+
+    @Override
+    public int linearSearch(int elementToSearch) {
+        for(int i = 0; i < array.length; i++){
+            if(array[i] == elementToSearch){
+                return i;
+            }
+        }
         return -1;
     }
 }
