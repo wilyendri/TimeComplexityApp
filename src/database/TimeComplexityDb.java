@@ -8,6 +8,7 @@ public class TimeComplexityDb {
     public static void main(String[] args) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/TimeComplexity",
                 "wilyendri", "21043600");
+        System.out.println("Connected to DB TimeComplexity");
     }
 
 }

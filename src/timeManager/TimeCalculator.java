@@ -1,10 +1,16 @@
+package timeManager;
+
+import algorithms.SearchAlgo;
+import algorithms.SortingAlgo;
+
 import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 
-public class TimeCalculator{
-    private int[] array;
+public class TimeCalculator extends SearchAlgo {
+    private final int[] array;
 
     public TimeCalculator(int[] array){
+        super(array);
         this.array = Arrays.copyOf(array, array.length);
     }
 
@@ -36,6 +42,19 @@ public class TimeCalculator{
         return endTime - initTime;
     }
 
+    public long calculateBinarySearch(int elementToSearch){
+        long initTime = System.currentTimeMillis();
+        super.binarySearch(elementToSearch);
+        long endTime = System.currentTimeMillis();
+        return endTime - initTime;
+    }
+
+    public long calculateLinearSearch(int elementToSearch){
+        long initTime = System.currentTimeMillis();
+        super.linearSearch(elementToSearch);
+        long endTime = System.currentTimeMillis();
+        return endTime - initTime;
+    }
     @Override
     public String toString() {
         return Arrays.toString(array);
@@ -43,5 +62,9 @@ public class TimeCalculator{
 
     public int[] getArray() {
         return array;
+    }
+
+    private void calculateTime(){
+
     }
 }

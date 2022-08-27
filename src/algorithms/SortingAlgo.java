@@ -1,9 +1,11 @@
+package algorithms;
+
 import java.util.concurrent.TimeoutException;
 
 /**This class holds different sorting algorithm. It was made final to avoid extending this class.
 @author Wilyendri Duran*/
 
-public final class SortingAlgo{
+public final class SortingAlgo {
     /**Private constructor so it cannot be instantiated*/
     private SortingAlgo(){}
 
@@ -13,7 +15,7 @@ public final class SortingAlgo{
         arr[j] = temp;
     }
 
-    static void mergeSort(int[] arrayInput){
+    public static void mergeSort(int[] arrayInput){
         int midSize = arrayInput.length/2;
         int[] firstHalfArray = new int[midSize];
         int[] secondHalf = new int[arrayInput.length - midSize];
@@ -32,8 +34,8 @@ public final class SortingAlgo{
 
         }
 
-        mergeSort(firstHalfArray);
-        mergeSort(secondHalf);
+        SortingAlgo.mergeSort(firstHalfArray);
+        SortingAlgo.mergeSort(secondHalf);
         merge(arrayInput, firstHalfArray, secondHalf);
 
     }
@@ -70,7 +72,7 @@ public final class SortingAlgo{
     /** Sort array by Bubble Sort
      * @param inputArray to be sorted
      * @throws TimeoutException if the sorting takes longer than 10seg*/
-    static void bubbleSort(int[] inputArray) throws TimeoutException {
+    public static void bubbleSort(int[] inputArray) throws TimeoutException {
         long initTime = System.currentTimeMillis();
         long endTime = initTime + 10 * 1000;
         for(int i  = 0; i < inputArray.length && System.currentTimeMillis() < endTime; i++){
@@ -89,7 +91,7 @@ public final class SortingAlgo{
     /** Sort array by Insertion Sort
      * @param inputArray to be sorted
      * @throws TimeoutException if the sorting takes longer than 10seg*/
-    static void insertionSort(int[] inputArray) throws TimeoutException {
+    public static void insertionSort(int[] inputArray) throws TimeoutException {
         long initTime = System.currentTimeMillis();
         long endTime = initTime + 10 * 1000;
         for(int i  = 1; i < inputArray.length && System.currentTimeMillis() < endTime; i++){
@@ -107,7 +109,7 @@ public final class SortingAlgo{
         }
     }
 
-    static void quickSort(int[] inputArray, int low, int high) throws StackOverflowError{
+    public static void quickSort(int[] inputArray, int low, int high) throws StackOverflowError{
         if(low < high){
             int pivot = partition(inputArray, low, high);
             quickSort(inputArray, low, pivot-1);

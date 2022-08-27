@@ -1,3 +1,5 @@
+package IOFeature;
+
 import java.io.*;
 
 public class SaveResult implements Serializable {
