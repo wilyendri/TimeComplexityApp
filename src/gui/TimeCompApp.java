@@ -7,17 +7,26 @@ with. Each button will sort the array and calculate the time the specified sorti
 */
 import IOFeature.OpenFile;
 import IOFeature.SaveResult;
-import gui.ErrorWindow;
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import timeManager.TimeCalculator;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -31,10 +40,14 @@ public class TimeCompApp extends Application{
     Button btnQuick = new Button("QuickSort");
     Button btnClear = new Button("Clear");
     Button btnInsert = new Button("Insert/Shuffle");
+    Button btnBinaryS = new Button("BinarySearch");
+    Button btnLinearS = new Button("LinearSearch");
     Label lblSize = new Label("Size ");
     Label lblRange = new Label("From 0 to ");
+    Label searchNumberLbl = new Label("#");
     TextField textSize = new TextField();
     TextField textEnd = new TextField();
+    TextField txtSearchNumber = new TextField("Type # to search");
     TextArea textOut = new TextArea();
     int[] arrayToSort;
     boolean isPressedInsert = false;
@@ -74,37 +87,28 @@ public class TimeCompApp extends Application{
         BorderPane allPanes = new BorderPane();
         BorderPane paneImagesBox = new BorderPane();
         paneImagesBox.setRight(quickImage);
-        HBox hBox = new HBox();
-        HBox hBoxBtns = new HBox();
-        hBox.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
-        hBoxBtns.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
+        HBox hBoxTop = new HBox();
+        HBox hBoxCenter = new HBox();
+        HBox hBoxBottom = new HBox();
+        hBoxTop.getChildren().addAll(lblSize, textSize, lblRange, textEnd, btnInsert);
+        hBoxCenter.getChildren().addAll(btnBubble,btnInsertion,btnMerge,btnQuick, btnClear);
+        hBoxBottom.getChildren().addAll(btnBinaryS, btnLinearS, txtSearchNumber);
         GridPane gridPane = new GridPane();
         menuBar.getMenus().addAll(menuFile, menuHelp);
         gridPane.add(menuBar,0,0);
-        gridPane.add(hBox, 0,1);
+        gridPane.add(hBoxTop, 0,1);
         Pane paneText = new Pane(textOut);
         gridPane.add(paneText, 0,2);
-        gridPane.add(hBoxBtns, 0, 3);
+        gridPane.add(hBoxCenter, 0, 3);
+        gridPane.add(hBoxBottom, 0, 4);
         allPanes.setLeft(gridPane);
 
         // Stage to output window error
         Stage errorStage = new Stage();
 
-        // Buttons actions
-        btnInsert.setOnAction(e->{
-            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
-                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
-                isPressedInsert = true;
-                fillArray();
-                textOut.appendText("Data has been updated on " + new Date() + "\n");
-            }else{
-                errorWindow = new ErrorWindow("Both data must be inserted.");
-                try {
-                    errorWindow.start(errorStage);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+        // text fields and menus actions
+        txtSearchNumber.setOnMouseClicked(e->{
+            txtSearchNumber.clear();
         });
 
         menuSave.setOnAction(e->{
@@ -131,6 +135,36 @@ public class TimeCompApp extends Application{
                 System.out.println("Not such a file");
             }catch (NullPointerException exception){
                 System.out.println("Operation cancelled: Path is empty");
+            }
+        });
+
+        // Buttons Styles
+        btnBubble.setCursor(Cursor.HAND);
+        btnClear.setCursor(Cursor.HAND);
+        btnInsert.setCursor(Cursor.HAND);
+        btnInsert.setCursor(Cursor.HAND);
+        btnInsertion.setCursor(Cursor.HAND);
+        btnMerge.setCursor(Cursor.HAND);
+        btnQuick.setCursor(Cursor.HAND);
+        btnLinearS.setStyle("-fx-background-color: #000099; -fx-text-fill: #999900");
+        btnLinearS.setCursor(Cursor.HAND);
+        btnBinaryS.setStyle("-fx-background-color: #009900; -fx-text-fill: #000099");
+        btnBinaryS.setCursor(Cursor.HAND);
+
+        // Buttons actions
+        btnInsert.setOnAction(e->{
+            if(!textSize.getText().isEmpty() && !textEnd.getText().isEmpty()
+                    || !textSize.getText().isBlank() && !textEnd.getText().isBlank()){
+                isPressedInsert = true;
+                fillArray();
+                textOut.appendText("Data has been updated on " + new Date() + "\n");
+            }else{
+                errorWindow = new ErrorWindow("Both data must be inserted.");
+                try {
+                    errorWindow.start(errorStage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -239,6 +273,7 @@ public class TimeCompApp extends Application{
 
             }
         });
+
 
         Scene scene = new Scene(allPanes, 1400, 800);
         stage.setTitle("Time Complexity Application");
