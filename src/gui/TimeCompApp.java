@@ -7,6 +7,7 @@ with. Each button will sort the array and calculate the time the specified sorti
 */
 import IOFeature.OpenFile;
 import IOFeature.SaveResult;
+import java.security.SecureRandom;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -282,7 +283,7 @@ public class TimeCompApp extends Application{
     }
 
     public void fillArray(){
-        Random rand = new Random();
+        Random rand = new SecureRandom();
         arrayToSort = new int[Integer.parseInt(textSize.getText().trim())];
         for(int i = 0; i < arrayToSort.length; i++){
             arrayToSort[i] = rand.nextInt(Integer.parseInt(textEnd.getText().trim()));
